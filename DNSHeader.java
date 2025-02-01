@@ -1,8 +1,17 @@
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 public class DNSHeader 
 {
+    // There are specific details related to these at ietf.org
+    int ID = -1;
+    int FLAGS = -1;
+    // Docs say these are unsigned
+    int QDCOUNT = -1;
+    int ANCOUNT = -1;
+    int NSCOUNT = -1;
+    int ARCOUNT = -1;
 
     /*  read the header from an input stream (we'll use a ByteArrayInputStream
      *  but we will only use the basic read methods of input stream to read 1 byte,
@@ -10,7 +19,34 @@ public class DNSHeader
      */
     public static DNSHeader DecodeHeader(InputStream inputStream)
     {
-        return new DNSHeader();
+        DNSHeader dnsHeader = new DNSHeader();
+        try
+        {
+            byte[] header = new byte[12];
+            inputStream.read(header);
+            
+
+            dnsHeader.ID = ((header[0] & 0xFF) << 8) | (header[1] & 0xFF);
+            dnsHeader.FLAGS = ((header[2] & 0xFF) << 8) | (header[3] & 0xFF);
+            dnsHeader.QDCOUNT = ((header[4] & 0xFF) << 8) | (header[5] & 0xFF);
+            dnsHeader.ANCOUNT = ((header[6] & 0xFF) << 8) | (header[7] & 0xFF);
+            dnsHeader.NSCOUNT = ((header[8] & 0xFF) << 8) | (header[9] & 0xFF);
+            dnsHeader.ARCOUNT = ((header[10] & 0xFF) << 8) | (header[11] & 0xFF);
+
+            return dnsHeader;
+        }
+        catch (IOException e)
+        {
+            System.err.println("An error occurred while Decoding Header: " + e.getMessage());
+            dnsHeader.ID = -1;
+            dnsHeader.FLAGS = -1;
+            dnsHeader.QDCOUNT = -1;
+            dnsHeader.ANCOUNT = -1;
+            dnsHeader.NSCOUNT = -1;
+            dnsHeader.ARCOUNT = -1;
+
+            return dnsHeader;
+        }
     }
 
     /*  This will create the header for the response. It will copy some fields
@@ -36,6 +72,11 @@ public class DNSHeader
     public String ToString()
     {
         return "";
+    }
+
+    public static String ByteToBits(byte b)
+    {
+        return String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0');
     }
 
 }
