@@ -82,7 +82,7 @@ public class DNSServer
 
         byte[] responseBytes = responseMessage.ToBytes();
 
-         // response comparison with Wireshark
+        // response comparison with Wireshark
         System.out.println("Raw DNS Response In Hex: " + bytesToHex(responseBytes));
 
         DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, requestPacket.getAddress(), requestPacket.getPort());
