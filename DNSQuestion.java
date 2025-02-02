@@ -2,6 +2,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class DNSQuestion 
 {
@@ -47,4 +48,29 @@ public class DNSQuestion
     /*  toString(), equals(), and hashCode() -- Let your IDE generate these. They're needed to
      *  use a question as a HashMap key, and to get a human readable string.eBytes(ByteArrayOutputStream byteArrayOutputStream, HashMap<String, Integer> domainNameLocations)
      */
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+
+        if (obj == null || getClass() != obj.getClass())
+        {
+            return false;
+        }
+
+        DNSQuestion that = (DNSQuestion) obj;
+        return QTYPE == that.QTYPE &&
+                QCLASS == that.QCLASS &&
+                Objects.equals(QNAME, that.QNAME);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(QNAME, QTYPE, QCLASS);
+    }
 }

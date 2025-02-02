@@ -1,12 +1,14 @@
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 
 public class DNSRecord 
 {
-    private long creationTime = System.currentTimeMillis();
+    private Date expirationTime;
     String NAME;
     int TYPE;
     int CLASS;
@@ -35,6 +37,10 @@ public class DNSRecord
 
         record.RDATA = new byte[record.RDLENGTH];
         inputStream.read(record.RDATA);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.SECOND, record.TTL);
+        record.expirationTime = calendar.getTime();
 
         return record;
     }
@@ -69,7 +75,6 @@ public class DNSRecord
      */
     public boolean IsExpired()
     {
-        long currentTime = System.currentTimeMillis();
-        return (currentTime - creationTime) / 1000 > TTL;
+        return new Date().after(expirationTime);
     }
 }

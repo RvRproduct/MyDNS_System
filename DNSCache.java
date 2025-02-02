@@ -1,4 +1,5 @@
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class DNSCache 
@@ -20,23 +21,40 @@ public class DNSCache
 
             if (record.IsExpired())
             {
+                System.out.println("CACHE entry expired for: " + question.QNAME);
                 localCache.remove(question);
                 return null;
             }
 
+            System.out.println("CACHE FOUND: " + question.QNAME);
             return record;
         }
 
+        System.out.println("CACHE NOT FOUND: " + question.QNAME);
         return null;
     }
 
     /* Insert a Record to the cache */
-    public void InsertRecord(DNSQuestion question, DNSRecord answer)
+    public void InsertRecord(DNSQuestion question, DNSRecord[] answers)
     {
-        if (!localCache.containsKey(question))
+        if (answers.length > 0)
         {
-            localCache.put(question, answer);
+            DNSRecord firstAnswer = answers[0];
+            if (!localCache.containsKey(question))
+            {
+                localCache.put(question, firstAnswer);
+                System.out.println("Inserted into CACHE: " + question.QNAME + " -> " + Arrays.toString(firstAnswer.RDATA));
+            }
+            else
+            {
+                System.out.println("CACHE already contains: " + question.QNAME);
+            }
         }
+        else
+        {
+            System.out.println("No valid answer received, skipping CACHE.");
+        }
+        
     }
 
 }

@@ -56,11 +56,11 @@ public class DNSHeader
 
         responseHeader.QDCOUNT = request.dnsHeader.QDCOUNT;
 
-        responseHeader.ANCOUNT = response.answers.length;
+        responseHeader.ANCOUNT = (response.answers != null) ? response.answers.length : 0;
 
-        responseHeader.NSCOUNT = response.authorityRecords.length;
+        responseHeader.NSCOUNT = (response.authorityRecords != null) ? response.authorityRecords.length : 0;
 
-        responseHeader.ANCOUNT = response.additionalRecords.length;
+        responseHeader.ANCOUNT = (response.additionalRecords != null) ? response.additionalRecords.length : 0;
 
         return responseHeader;
     }

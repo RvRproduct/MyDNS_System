@@ -111,18 +111,18 @@ public class DNSMessage
    {
       DNSMessage response = new DNSMessage();
 
+      // Answers
+      response.answers = (answers != null) ? answers : new DNSRecord[0];
+      
+      // Authority and Additional Records
+      response.authorityRecords = new DNSRecord[0];
+      response.additionalRecords = new DNSRecord[0];
+
       // Header
       response.dnsHeader = DNSHeader.BuildHeaderForResponse(request, response);
 
       // Questions
       response.questions = request.questions;
-
-      // Answers
-      response.answers = answers;
-
-      // Authority and Additional Records
-      response.authorityRecords = new DNSRecord[0];
-      response.additionalRecords = new DNSRecord[0];
 
       return response;
    }

@@ -44,7 +44,7 @@ public class DNSServer
 
             if (responseMessage.answers.length > 0)
             {
-                CACHE.InsertRecord(requestMessage.questions[0], responseMessage.answers[0]);
+                CACHE.InsertRecord(requestMessage.questions[0], responseMessage.answers);
             }
 
             SendResponse(socket, requestPacket, responseMessage, responseMessage.answers);
