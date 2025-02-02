@@ -27,7 +27,7 @@ public class DNSServer
             socket.receive(requestPacket);
             System.out.println("Received DNS query from " + requestPacket.getAddress() + ":" + requestPacket.getPort());
 
-            // So we can compare Easily with Wireshark
+            // So we can compare Query Easily with Wireshark
             byte[] rawQuery = Arrays.copyOf(requestPacket.getData(), requestPacket.getLength());
             System.out.println("Raw DNS Query In Hex: " + bytesToHex(rawQuery));
             
@@ -81,6 +81,9 @@ public class DNSServer
         DNSMessage responseMessage = DNSMessage.BuildResponse(requestMessage, answers);
 
         byte[] responseBytes = responseMessage.ToBytes();
+
+         // response comparison with Wireshark
+        System.out.println("Raw DNS Response In Hex: " + bytesToHex(responseBytes));
 
         DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, requestPacket.getAddress(), requestPacket.getPort());
         socket.send(responsePacket);
