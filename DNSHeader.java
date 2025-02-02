@@ -97,9 +97,6 @@ public class DNSHeader
     //     return "";
     // }
 
-    public static String ByteToBits(byte b)
-    {
-        return String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0');
-    }
+   
 
 }
