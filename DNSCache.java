@@ -9,18 +9,34 @@ public class DNSCache
      * records into the cache. When you look up an entry, if its too old (its
      * TTL has expired), remove it and return "not found."
      */
-    public HashMap<DNSQuestion, DNSRecord> localCache;
+    public HashMap<DNSQuestion, DNSRecord> localCache = new HashMap<>();
 
     /* Query a record from the cache */
-    public DNSRecord QueryRecord()
+    public DNSRecord QueryRecord(DNSQuestion question)
     {
-        return new DNSRecord();
+        if (localCache.containsKey(question))
+        {
+            DNSRecord record = localCache.get(question);
+
+            if (record.IsExpired())
+            {
+                localCache.remove(question);
+                return null;
+            }
+
+            return record;
+        }
+
+        return null;
     }
 
     /* Insert a Record to the cache */
     public void InsertRecord(DNSQuestion question, DNSRecord answer)
     {
-
+        if (!localCache.containsKey(question))
+        {
+            localCache.put(question, answer);
+        }
     }
 
 }
